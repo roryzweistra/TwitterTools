@@ -7,17 +7,16 @@ package WebGUI::Macro::GetTweets;
 #-------------------------------------------------------------------
 
 use strict;
+use WebGUI::Asset::Template;
 use Net::Twitter::Lite;
-use WebGUI::DateTime;
-use Data::Dumper;
 
 #-------------------------------------------------------------------
 sub process {
 	my $session 		= shift;
-	my $template		= shift || "";
-	my $username		= shift || "WUC2009"; # Fill in a username here for connecting to a default account
-	my $password		= shift || "wuc2009"; # Fill in a password here for connecting to a default account
-	my $messageCount	= shift || "10"; # The number of tweets, defaults to 10 
+	my $templateId		= shift || "";
+	my $username		= shift || ""; 		# Fill in a username here for connecting to a default account
+	my $password		= shift || ""; 		# Fill in a password here for connecting to a default account
+	my $messageCount	= shift || "10";	# The number of tweets, defaults to 10 
 
 	# Test connection and throw error if any    
 	my $twitterConnection;
@@ -35,11 +34,15 @@ sub process {
 	# Get the tweets
 	my $tweets = $twitterConnection->user_timeline( { count => $messageCount } ); 
 	
+	unless ( $tweets ) {
+		return "No Tweets were found.";
+	}
+	
 	# Create template vars
 	my @tweetsLoop;
-	my $var		= {};
+	my $var = {};
 	
-	foreach my $tweet ( @{$tweets} ) {
+	foreach my $tweet ( @{ $tweets } ) {
 		
 		push ( @tweetsLoop, {
 			tweetId		=> $tweet->{ id			},
@@ -51,14 +54,12 @@ sub process {
 			name		=> $tweet->{ user 		}->{ name				},
 			userPicUrl	=> $tweet->{ user		}->{ profile_image_url	},
 			url			=> $tweet->{ user		}->{ url				},
-		});
+		} );
 	}
 	
 	$var->{ 'tweetLoop' } = \@tweetsLoop;
-
-	$session->log->error(Dumper($var));
 	
-    return;
+	return WebGUI::Asset::Template->new( $session, $templateId)->process( $var );
 }
 
 1;
