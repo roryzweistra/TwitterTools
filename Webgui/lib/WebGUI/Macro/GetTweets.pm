@@ -51,7 +51,7 @@ sub process {
 
 	# Test connection and throw error if any    
 	my $twitterConnection;
-    eval {
+	eval {
 		$twitterConnection	= Net::Twitter::Lite->new(
 			username	=> $username,
 			password	=> $password
@@ -78,7 +78,7 @@ sub process {
 		push ( @tweetsLoop, {
 			tweetId		=> $tweet->{ id			},
 			date		=> $tweet->{ created_at	},
-			source		=> $tweet->{ source 	},
+			source		=> $tweet->{ source		},
 			text 		=> $tweet->{ text		},
 			userId		=> $tweet->{ user		}->{ id					},
 			username	=> $tweet->{ user		}->{ screen_name		},
