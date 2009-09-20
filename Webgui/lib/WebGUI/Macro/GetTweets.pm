@@ -79,7 +79,7 @@ sub process {
 			tweetId		=> $tweet->{ id			},
 			date		=> $tweet->{ created_at	},
 			source		=> $tweet->{ source		},
-			text 		=> $tweet->{ text		},
+			text		=> $tweet->{ text		},
 			userId		=> $tweet->{ user		}->{ id					},
 			username	=> $tweet->{ user		}->{ screen_name		},
 			name		=> $tweet->{ user 		}->{ name				},
