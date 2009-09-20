@@ -10,6 +10,37 @@ use strict;
 use WebGUI::Asset::Template;
 use Net::Twitter::Lite;
 
+=head1 NAME 
+
+Package WebGUI::Macro::GetTweets
+ 
+=head1 DESCRIPTION
+ 
+Macro for returning status updates from a twitter account.
+ 
+=head2 process ( templateId, username, password, messageCount )
+ 
+=head3 templateId
+ 
+The GUID of a template that is used for displaying the tweets on a page
+
+=head3 username
+
+The username of the twitter account. Instead of passing it to the Macro you can also
+set the username in the Macro code itself.
+
+=head3 password
+
+The password of the twitter account. Instead of passing it to the Macro you can also
+set the password in the Macro code itself.
+
+=head3 messageCount
+
+The number of tweets to be shown on the page. Defaults to 10.
+
+=cut
+
+
 #-------------------------------------------------------------------
 sub process {
 	my $session 		= shift;
@@ -59,7 +90,15 @@ sub process {
 	
 	$var->{ 'tweetLoop' } = \@tweetsLoop;
 	
-	return WebGUI::Asset::Template->new( $session, $templateId)->process( $var );
+	my $template = WebGUI::Asset::Template->new( $session, $templateId );
+	
+	if ( $template ) {
+		return $template->process( $var );
+	}
+	else {
+		return "Template could not be instanciated.";
+	}
+	
 }
 
 1;
