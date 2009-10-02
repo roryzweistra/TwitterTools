@@ -92,12 +92,7 @@ sub process {
 	
 	my $template = WebGUI::Asset::Template->new( $session, $templateId );
 	
-	if ( $template ) {
-		return $template->process( $var );
-	}
-	else {
-		return "Template could not be instanciated.";
-	}
+	( $template ) ? return $template->process( $var ) : return "Template could not be instanciated.";
 	
 }
 
